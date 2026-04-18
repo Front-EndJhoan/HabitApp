@@ -26,10 +26,10 @@ Sigue estos pasos para ejecutar el proyecto en tu entorno local:
 
 ```bash
 # Clonar el repositorio
-git clone https://github.com/tu-usuario/tu-repo.git
+git clone https://github.com/Front-EndJhoan/HabitApp.git
 
 # Acceder al directorio
-cd tu-repo
+cd HabitApp
 
 # Instalar dependencias
 npm install
