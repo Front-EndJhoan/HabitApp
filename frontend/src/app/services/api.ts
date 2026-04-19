@@ -7,7 +7,15 @@ import type {
 } from "../types";
 
 const rawApiUrl = (import.meta as any).env?.VITE_API_URL as string | undefined;
-const API_BASE_URL = (rawApiUrl ?? "/api").replace(/\/+$/, "");
+
+const normalizeApiUrl = (url: string) => {
+  const trimmed = url.replace(/\/+$/, "");
+  if (trimmed.endsWith("/api")) return trimmed;
+  if (/\/api($|\/)/.test(trimmed)) return trimmed;
+  return `${trimmed}/api`;
+};
+
+const API_BASE_URL = rawApiUrl ? normalizeApiUrl(rawApiUrl) : "/api";
 
 if (typeof window !== "undefined") {
   if (!rawApiUrl && import.meta.env?.MODE === "production") {
@@ -17,6 +25,10 @@ if (typeof window !== "undefined") {
   } else if (rawApiUrl?.includes("/auth")) {
     console.warn(
       "[HabitApp] VITE_API_URL no debe incluir /auth. Use la URL base del backend, por ejemplo https://api.example.com/api"
+    );
+  } else if (rawApiUrl && !rawApiUrl.includes("/api")) {
+    console.warn(
+      `[HabitApp] VITE_API_URL se normalizó a ${API_BASE_URL}. Si tu backend usa /api, configura VITE_API_URL con la ruta base del API.`
     );
   }
 }
