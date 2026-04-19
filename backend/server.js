@@ -39,17 +39,22 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // CORS
-const frontendUrl = process.env.FRONTEND_URL || "http://localhost:5173";
+// CORS — reemplaza todo el bloque actual
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim())
-  : [frontendUrl];
+  ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim().replace(/\/+$/, ""))
+  : [
+      "http://localhost:5173",
+      "https://habit-app-iota-nine.vercel.app",  // sin barra al final
+    ];
 
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Normaliza el origin recibido también (por si acaso)
+    const normalizedOrigin = origin?.replace(/\/+$/, "");
+    if (!normalizedOrigin || allowedOrigins.includes(normalizedOrigin)) {
       callback(null, true);
     } else {
-      callback(new Error(`CORS policy: origin ${origin} not allowed`));
+      callback(new Error(`CORS policy: origin ${normalizedOrigin} not allowed`));
     }
   },
   credentials: true,
@@ -57,7 +62,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
-
 app.use(express.json());
 app.use(cookieParser());
 
