@@ -6,9 +6,20 @@ import type {
   HabitStats,
 } from "../types";
 
-const API_BASE_URL =
-  ((import.meta as any).env?.VITE_API_URL as string | undefined) ??
-  "http://localhost:3000/api";
+const rawApiUrl = (import.meta as any).env?.VITE_API_URL as string | undefined;
+const API_BASE_URL = (rawApiUrl ?? "/api").replace(/\/+$/, "");
+
+if (typeof window !== "undefined") {
+  if (!rawApiUrl && import.meta.env?.MODE === "production") {
+    console.warn(
+      "[HabitApp] No VITE_API_URL configurada, usando ruta relativa /api. Asegúrate de que el backend recibe peticiones en /api."
+    );
+  } else if (rawApiUrl?.includes("/auth")) {
+    console.warn(
+      "[HabitApp] VITE_API_URL no debe incluir /auth. Use la URL base del backend, por ejemplo https://api.example.com/api"
+    );
+  }
+}
 
 // Helper para manejar respuestas y errores HTTP
 const handleResponse = async <T>(response: Response): Promise<T> => {
