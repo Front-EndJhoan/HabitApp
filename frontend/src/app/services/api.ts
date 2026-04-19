@@ -65,22 +65,32 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
 
 export const authAPI = {
   login: async (credentials: LoginCredentials): Promise<{ user: User }> => {
-    const response = await fetch(`${API_BASE_URL}/auth/login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(credentials),
-    });
-    return handleResponse<{ user: User }>(response);
+    try {
+      const response = await fetchWithTimeout(`${API_BASE_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(credentials),
+      });
+      return handleResponse<{ user: User }>(response);
+    } catch (err) {
+      if (err instanceof Error && err.name === "AbortError") throw new Error("El servidor tardó demasiado. Intenta de nuevo.");
+      throw err;
+    }
   },
   register: async (credentials: RegisterCredentials): Promise<{ user: User }> => {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(credentials),
-    });
-    return handleResponse<{ user: User }>(response);
+    try {
+      const response = await fetchWithTimeout(`${API_BASE_URL}/auth/register`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(credentials),
+      });
+      return handleResponse<{ user: User }>(response);
+    } catch (err) {
+      if (err instanceof Error && err.name === "AbortError") throw new Error("El servidor tardó demasiado. Intenta de nuevo.");
+      throw err;
+    }
   },
   logout: async (): Promise<{ message: string }> => {
     const response = await fetch(`${API_BASE_URL}/auth/logout`, {
