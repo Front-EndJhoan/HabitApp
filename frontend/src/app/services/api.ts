@@ -35,15 +35,16 @@ const getApiBaseUrl = (): string => {
   return "/api";
 };
 
-const API_BASE_URL: string = getApiBaseUrl();
+const VITE_API_URL: string = getApiBaseUrl();
 
 if (typeof window !== "undefined") {
+  console.log(`[HabitApp] VITE_API_URL: ${VITE_API_URL}`);
   if (!rawApiUrl && env.MODE === "production") {
-    console.warn(`[HabitApp] Usando API base: ${API_BASE_URL}. Si el backend está en otro dominio, configura VITE_API_URL.`);
+    console.warn(`[HabitApp] Usando API base: ${VITE_API_URL}. Si el backend está en otro dominio, configura VITE_API_URL.`);
   } else if (rawApiUrl?.includes("/auth")) {
     console.warn("[HabitApp] VITE_API_URL no debe incluir /auth.");
   } else if (rawApiUrl && !rawApiUrl.includes("/api")) {
-    console.warn(`[HabitApp] VITE_API_URL se normalizó a ${API_BASE_URL}.`);
+    console.warn(`[HabitApp] VITE_API_URL se normalizó a ${VITE_API_URL}.`);
   }
 }
 
@@ -65,8 +66,9 @@ const handleResponse = async <T>(response: Response): Promise<T> => {
 
 export const authAPI = {
   login: async (credentials: LoginCredentials): Promise<{ user: User }> => {
+    console.log(`[HabitApp] Login attempt to: ${VITE_API_URL}/auth/login`);
     try {
-      const response = await fetchWithTimeout(`${API_BASE_URL}/auth/login`, {
+      const response = await fetchWithTimeout(`${VITE_API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -74,13 +76,15 @@ export const authAPI = {
       });
       return handleResponse<{ user: User }>(response);
     } catch (err) {
+      console.error('[HabitApp] Login error:', err);
       if (err instanceof Error && err.name === "AbortError") throw new Error("El servidor tardó demasiado. Intenta de nuevo.");
       throw err;
     }
   },
   register: async (credentials: RegisterCredentials): Promise<{ user: User }> => {
+    console.log(`[HabitApp] Register attempt to: ${VITE_API_URL}/auth/register`);
     try {
-      const response = await fetchWithTimeout(`${API_BASE_URL}/auth/register`, {
+      const response = await fetchWithTimeout(`${VITE_API_URL}/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -88,12 +92,13 @@ export const authAPI = {
       });
       return handleResponse<{ user: User }>(response);
     } catch (err) {
+      console.error('[HabitApp] Register error:', err);
       if (err instanceof Error && err.name === "AbortError") throw new Error("El servidor tardó demasiado. Intenta de nuevo.");
       throw err;
     }
   },
   logout: async (): Promise<{ message: string }> => {
-    const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+    const response = await fetch(`${VITE_API_URL}/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
@@ -101,7 +106,7 @@ export const authAPI = {
   },
   getMe: async (): Promise<User> => {
     try {
-      const response = await fetchWithTimeout(`${API_BASE_URL}/auth/me`, { credentials: "include" });
+      const response = await fetchWithTimeout(`${VITE_API_URL}/auth/me`, { credentials: "include" });
       return handleResponse<User>(response);
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") throw new Error("El servidor tardó demasiado. Intenta de nuevo.");
@@ -112,21 +117,21 @@ export const authAPI = {
 
 export const habitsAPI = {
   getHabits: async (): Promise<Habit[]> => {
-    const response = await fetch(`${API_BASE_URL}/habits`, {
+    const response = await fetch(`${VITE_API_URL}/habits`, {
       credentials: "include",
     });
     return handleResponse<Habit[]>(response);
   },
 
   getStats: async (): Promise<HabitStats> => {
-    const response = await fetch(`${API_BASE_URL}/habits/stats`, {
+    const response = await fetch(`${VITE_API_URL}/habits/stats`, {
       credentials: "include",
     });
     return handleResponse<HabitStats>(response);
   },
 
   createHabit: async (habit: { name: string; icon: string }): Promise<Habit> => {
-    const response = await fetch(`${API_BASE_URL}/habits`, {
+    const response = await fetch(`${VITE_API_URL}/habits`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -136,7 +141,7 @@ export const habitsAPI = {
   },
 
   toggleHabit: async (id: string): Promise<Habit> => {
-    const response = await fetch(`${API_BASE_URL}/habits/${id}/toggle`, {
+    const response = await fetch(`${VITE_API_URL}/habits/${id}/toggle`, {
       method: "PUT",
       credentials: "include",
     });
@@ -144,7 +149,7 @@ export const habitsAPI = {
   },
 
   updateHabit: async (id: string, updates: Partial<Habit>): Promise<Habit> => {
-    const response = await fetch(`${API_BASE_URL}/habits/${id}`, {
+    const response = await fetch(`${VITE_API_URL}/habits/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -154,7 +159,7 @@ export const habitsAPI = {
   },
 
   deleteHabit: async (id: string): Promise<{ message: string }> => {
-    const response = await fetch(`${API_BASE_URL}/habits/${id}`, {
+    const response = await fetch(`${VITE_API_URL}/habits/${id}`, {
       method: "DELETE",
       credentials: "include",
     });
