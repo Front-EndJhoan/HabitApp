@@ -79,10 +79,13 @@ export const authAPI = {
     return handleResponse<{ message: string }>(response);
   },
   getMe: async (): Promise<User> => {
-    const response = await fetch(`${API_BASE_URL}/auth/me`, {
-      credentials: "include",
-    });
-    return handleResponse<User>(response);
+    try {
+      const response = await fetchWithTimeout(`${API_BASE_URL}/auth/me`, { credentials: "include" });
+      return handleResponse<User>(response);
+    } catch (err) {
+      if (err instanceof Error && err.name === "AbortError") throw new Error("El servidor tardó demasiado. Intenta de nuevo.");
+      throw err;
+    }
   },
 };
 
