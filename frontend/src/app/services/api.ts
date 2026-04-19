@@ -6,7 +6,14 @@ import type {
   HabitStats,
 } from "../types";
 
-// Reemplaza las primeras líneas hasta API_BASE_URL por esto:
+
+const fetchWithTimeout = (url: string, options: RequestInit, ms = 10000): Promise<Response> => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), ms);
+  
+  return fetch(url, { ...options, signal: controller.signal })
+    .finally(() => clearTimeout(timeout));
+};
 
 const env = (import.meta as any).env ?? {};
 const rawApiUrl = env.VITE_API_URL as string | undefined;
