@@ -24,11 +24,22 @@ const normalizeApiUrl = (url: string): string => {
   return `${trimmed}/api`;
 };
 
-const API_BASE_URL: string = rawApiUrl ? normalizeApiUrl(rawApiUrl) : "/api";
+const getApiBaseUrl = (): string => {
+  if (rawApiUrl) {
+    return normalizeApiUrl(rawApiUrl);
+  }
+  // En producción, si no hay VITE_API_URL, usar la URL del sitio actual + /api
+  if (env.MODE === "production") {
+    return `${window.location.origin}/api`;
+  }
+  return "/api";
+};
+
+const API_BASE_URL: string = getApiBaseUrl();
 
 if (typeof window !== "undefined") {
   if (!rawApiUrl && env.MODE === "production") {
-    console.warn("[HabitApp] No VITE_API_URL configurada, usando ruta relativa /api.");
+    console.warn(`[HabitApp] Usando API base: ${API_BASE_URL}. Si el backend está en otro dominio, configura VITE_API_URL.`);
   } else if (rawApiUrl?.includes("/auth")) {
     console.warn("[HabitApp] VITE_API_URL no debe incluir /auth.");
   } else if (rawApiUrl && !rawApiUrl.includes("/api")) {
