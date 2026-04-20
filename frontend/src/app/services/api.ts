@@ -106,7 +106,10 @@ export const authAPI = {
   },
   getMe: async (): Promise<User> => {
     try {
-      const response = await fetchWithTimeout(`${VITE_API_URL}/auth/me`, { credentials: "include" });
+      const response = await fetchWithTimeout(`${VITE_API_URL}/auth/me`, {
+        method: "POST",
+        credentials: "include"
+      });
       return handleResponse<User>(response);
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") throw new Error("El servidor tardó demasiado. Intenta de nuevo.");
