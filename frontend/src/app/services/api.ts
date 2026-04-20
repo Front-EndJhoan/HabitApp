@@ -107,7 +107,7 @@ export const authAPI = {
   getMe: async (): Promise<User> => {
     try {
       const response = await fetchWithTimeout(`${VITE_API_URL}/auth/me`, {
-        method: "POST",
+        method: "GET",
         credentials: "include"
       });
       return handleResponse<User>(response);

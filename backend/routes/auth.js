@@ -103,7 +103,7 @@ router.post("/logout", authMiddleware, (req, res) => {
 
 // GET /api/auth/me
 router.get("/me", authMiddleware, (req, res) => {
-  res.json({ user: formatUser(req.user) });
+  res.json(formatUser(req.user));
 });
 
 export default router;
