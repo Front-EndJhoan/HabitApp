@@ -101,7 +101,7 @@ export function ProfilePage() {
 
         {/* Additional Info */}
         <div className="text-center text-gray-600 text-sm">
-          <p>HabitTracker v1.0.0</p>
+          <p>HabitApp v1.0.0</p>
         </div>
       </main>
     </div>

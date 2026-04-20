@@ -33,7 +33,7 @@ export function AuthForm({ mode, onSubmit, onToggleMode, isLoading = false }: Au
         style={{ backgroundColor: "var(--card)", color: "var(--card-foreground)" }}
       >
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-gray-900 mb-2">
+          <h1 className="text-3xl font-semibold text-gray-600 mb-2">
             {mode === "login" ? "Welcome Back" : "Create Account"}
           </h1>
           <p className="text-gray-600">
@@ -46,7 +46,7 @@ export function AuthForm({ mode, onSubmit, onToggleMode, isLoading = false }: Au
         <form onSubmit={handleSubmit} className="space-y-5">
           {mode === "register" && (
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-gray-700">
+              <Label htmlFor="username" className="text-gray-600">
                 Username
               </Label>
               <div className="relative">
@@ -65,7 +65,7 @@ export function AuthForm({ mode, onSubmit, onToggleMode, isLoading = false }: Au
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-gray-700">
+            <Label htmlFor="email" className="text-gray-600">
               Email
             </Label>
             <div className="relative">
