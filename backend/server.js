@@ -38,8 +38,7 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// CORS
-// CORS — reemplaza todo el bloque actual
+
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(",").map((o) => o.trim().replace(/\/+$/, ""))
   : [
@@ -60,7 +59,6 @@ const corsOptions = {
   credentials: true,
 };
 
-app.options(cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
