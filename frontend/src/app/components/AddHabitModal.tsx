@@ -76,7 +76,7 @@ export function AddHabitModal({ isOpen, onClose, onSave }: AddHabitModalProps) {
                   key={icon}
                   type="button"
                   onClick={() => setSelectedIcon(icon)}
-                  className={`p-2 text-2xl rounded-lg transition-all hover:scale-110 ${
+                  className={`p-2 text-2xl rounded-lg transition-all hover:scale-110 flex items-center justify-center ${
                     selectedIcon === icon
                       ? "bg-green-100 ring-2 ring-green-500"
                       : "bg-gray-100 hover:bg-gray-200"
