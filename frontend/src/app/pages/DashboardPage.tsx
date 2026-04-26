@@ -139,15 +139,15 @@ export function DashboardPage() {
             <div>
               <div className="flex items-center gap-2 mb-2">
                 <span className="text-4xl">🔥</span>
-                <span className="text-gray-400 text-4xl font-bold">{stats.streak}</span>
+                <span className="text-gray-300 text-4xl font-bold">{stats.streak}</span>
               </div>
-              <p className="text-gray-400">Day Streak</p>
+              <p className="text-gray-300">Day Streak</p>
             </div>
             <div className="text-right">
-              <p className="text-gray-400 text-2xl font-semibold">
+              <p className="text-gray-300 text-2xl font-semibold">
                 {stats.completedToday}/{stats.totalHabits}
               </p>
-              <p className="text-gray-400">Completed Today</p>
+              <p className="text-gray-300">Completed Today</p>
             </div>
           </div>
         </div>
