@@ -132,8 +132,8 @@ export function DashboardPage() {
 
         {/* Stats Card */}
         <div
-          className="rounded-2xl p-6 mb-8 shadow-lg"
-          style={{ backgroundColor: "var(--primary)", color: "var(--primary-foreground)" }}
+          className="rounded-2xl p-6 mb-8 shadow-lg bg-green-600"
+          style={{ color: "var(--primary-foreground)" }}
         >
           <div className="flex items-center justify-between">
             <div>
